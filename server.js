@@ -1,22 +1,26 @@
 const express = require('express')
 const app = express()
-const server = require('http').createServer(app)
+const server = require('http').Server(app)
 const io = require('socket.io')(server, {
 	cors: { //CORS policy
-		origin: '*',
-		methods: ['GET', 'POST'],
-		allowedHeaders: ["my-custom-header"],
-		credentials: true
+		origin: '*'
+		// methods: ['GET', 'POST'],
+		// allowedHeaders: ["my-custom-header"],
+		// credentials: true
 	}
 })
 
+app.use(express.json())
 
 const rooms = new Map();
 
 
-app.get('/rooms', (req, res) => {
-	res.json(rooms)
+app.post('/rooms', (req, res) => {
+	const { roomId, userName } = req.body
+	console.log(`${roomId} - ${userName}`);
+	res.end()
 })
+
 
 io.on('connection', socket => {
 	console.log('Connection:', socket.id);
